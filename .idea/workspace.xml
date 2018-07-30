@@ -4,7 +4,14 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b7abc622-3fee-47f1-a71d-e27a210a24f4" name="Default" comment="" />
+    <list default="true" id="b7abc622-3fee-47f1-a71d-e27a210a24f4" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/micahjon/expressvpntoggler/MainActivity.java" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/micahjon/expressvpntoggler/MainActivity.java" />
+      <change beforePath="$PROJECT_DIR$/lib/list-devices.dart" afterPath="$PROJECT_DIR$/lib/list-devices.dart" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" afterPath="$PROJECT_DIR$/lib/main.dart" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" afterPath="$PROJECT_DIR$/pubspec.lock" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" afterPath="$PROJECT_DIR$/pubspec.yaml" />
+    </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
     <ignored path="$PROJECT_DIR$/.pub/" />
@@ -24,8 +31,8 @@
       <file leaf-file-name="main.dart" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/main.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="337">
-              <caret line="92" column="0" lean-forward="false" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
+            <state relative-caret-position="848">
+              <caret line="284" column="0" lean-forward="true" selection-start-line="284" selection-start-column="0" selection-end-line="284" selection-end-column="0" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -36,11 +43,41 @@
       <file leaf-file-name="list-devices.dart" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/list-devices.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="185" column="17" lean-forward="true" selection-start-line="185" selection-start-column="17" selection-end-line="185" selection-end-column="17" />
+            <state relative-caret-position="288">
+              <caret line="146" column="42" lean-forward="true" selection-start-line="146" selection-start-column="42" selection-end-line="146" selection-end-column="42" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pubspec.yaml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pubspec.yaml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="465">
+              <caret line="31" column="62" lean-forward="false" selection-start-line="31" selection-start-column="62" selection-end-line="31" selection-end-column="62" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="basic.dart" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Sites/flutter/packages/flutter/lib/src/widgets/basic.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="824">
+              <caret line="3820" column="8" lean-forward="false" selection-start-line="3820" selection-start-column="8" selection-end-line="3820" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="text_field.dart" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Sites/flutter/packages/flutter/lib/src/material/text_field.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-60">
+              <caret line="98" column="8" lean-forward="false" selection-start-line="98" selection-start-column="8" selection-end-line="98" selection-end-column="8" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -56,13 +93,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>builder</find>
-      <find>new Mate</find>
-      <find>'a'</find>
-      <find>admin</find>
-      <find>data !=</find>
-      <find>import \'package\:flutter\/material\.dart\'\;\n\n\n\nclass ListDevices extends StatefulWidget \{\n  ListDevices\(\{Key key\, this\.authCookie\}\) \: super\(key\: key\)\;\n\n  \/\/ This widget is the home page of your application\. It is stateful\, meaning\n  \/\/ that it has a State object \(defined below\) that contains fields that affect\n  \/\/ how it looks\.\n\n  \/\/ This class is the configuration for the state\. It holds the values \(in this\n  \/\/ case the authCookie\) provided by the parent \(in this case the App widget\) and\n  \/\/ used by the build method of the State\. Fields in a Widget subclass are\n  \/\/ always marked \&quot;final\&quot;\.\n\n  final String authCookie\;\n\n  \@override\n  _ListDevicesState createState\(\) \=\&gt; new _ListDevicesState\(\)\;\n\}\n\n\nclass _ListDevicesState extends State\&lt;ListDevices\&gt; \{\n\n  \@override\n  Widget build\(BuildContext context\) \{\n    \/\/ This method is rerun every time setState is called\, for instance as done\n    \/\/ by the _incrementCounter method above\.\n    \/\/\n    \/\/ The Flutter framework has been optimized to make rerunning build methods\n    \/\/ fast\, so that you can just rebuild anything that needs updating rather\n    \/\/ than having to individually change instances of widgets\.\n    return new Scaffold\(\n      appBar\: new AppBar\(\n        \/\/ Here we take the value from the ListDevices object that was created by\n        \/\/ the App\.build method\, and use it to set our appbar title\.\n        title\: new Text\(\'Connected Devices\'\)\,\n      \)\,\n      body\: new Center\(\n        \/\/ Center is a layout widget\. It takes a single child and positions it\n        \/\/ in the middle of the parent\.\n        child\: new Column\(\n          \/\/ Column is also layout widget\. It takes a list of children and\n          \/\/ arranges them vertically\. By default\, it sizes itself to fit its\n          \/\/ children horizontally\, and tries to be as tall as its parent\.\n          \/\/\n          \/\/ Invoke \&quot;debug paint\&quot; \(press \&quot;p\&quot; in the console where you ran\n          \/\/ \&quot;flutter run\&quot;\, or select \&quot;Toggle Debug Paint\&quot; from the Flutter tool\n          \/\/ window in IntelliJ\) to see the wireframe for each widget\.\n          \/\/\n          \/\/ Column has various properties to control how it sizes itself and\n          \/\/ how it positions its children\. Here we use mainAxisAlignment to\n          \/\/ center the children vertically\; the main axis here is the vertical\n          \/\/ axis because Columns are vertical \(the cross axis would be\n          \/\/ horizontal\)\.\n          mainAxisAlignment\: MainAxisAlignment\.center\,\n          children\: \&lt;Widget\&gt;\[\n            new Padding\(\n              padding\: const EdgeInsets\.symmetric\(horizontal\: 20\.0\)\,\n              child\: new ListTile\(\n                leading\: const Icon\(Icons\.person\)\,\n                title\: new TextField\(\n                  decoration\: new InputDecoration\(\n                    hintText\: \&quot;Username\&quot;\,\n                  \)\,\n                \)\,\n              \)\,\n            \)\,\n            new Padding\(\n              padding\: const EdgeInsets\.symmetric\(horizontal\: 20\.0\)\,\n              child\: new ListTile\(\n                leading\: const Icon\(Icons\.lock\)\,\n                title\: new TextField\(\n                  decoration\: new InputDecoration\(\n                    hintText\: \&quot;Password\&quot;\,\n\/\/                    Navigator\.pop\(context\)\;\n                  \)\,\n                \)\,\n              \)\,\n            \)\,\n            FutureBuilder\&lt;String\&gt;\(\n              future\: getAuthCookie\(username\, password\)\, \/\/ fetchPost\(\)\,\n              builder\: \(context\, snapshot\) \{\n                if \(snapshot\.hasData\) \{\n                  return Text\(snapshot\.data\)\;\n                \} else if \(snapshot\.hasError\) \{\n                  return Text\(\&quot;\$\{snapshot\.error\}\&quot;\)\;\n                \}\n\n                \/\/ By default\, show a loading spinner\n                return CircularProgressIndicator\(\)\;\n              \}\,\n            \)\,\n          \]\,\n        \)\,\n      \)\,\n    \)\;\n  \}\n\}</find>
-      <find>StateFul</find>
       <find>new Text</find>
       <find>ready to</find>
       <find>getAut</find>
@@ -82,6 +112,17 @@
       <find>upperc</find>
       <find>star</find>
       <find>onpress</find>
+      <find>starred</find>
+      <find>updateStarr</find>
+      <find>updateDeviceVPNMode</find>
+      <find>name</find>
+      <find>editNam</find>
+      <find>extends St</find>
+      <find>100.0</find>
+      <find>mac_add</find>
+      <find>getCree</find>
+      <find>getCre</find>
+      <find>getCred</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -98,10 +139,10 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/pubspec.yaml" />
-        <option value="$PROJECT_DIR$/lib/main.dart" />
         <option value="$PROJECT_DIR$/android/app/src/main/java/com/micahjon/expressvpntoggler/MainActivity.java" />
         <option value="$PROJECT_DIR$/lib/list-devices.dart" />
+        <option value="$PROJECT_DIR$/pubspec.yaml" />
+        <option value="$PROJECT_DIR$/lib/main.dart" />
       </list>
     </option>
   </component>
@@ -202,46 +243,6 @@
               <item name="expressvpn_toggler" type="b2602c69:ProjectViewProjectNode" />
               <item name="expressvpn_toggler" type="462c0819:PsiDirectoryNode" />
               <item name="android" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="expressvpn_toggler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="expressvpn_toggler" type="462c0819:PsiDirectoryNode" />
-              <item name="android" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="expressvpn_toggler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="expressvpn_toggler" type="462c0819:PsiDirectoryNode" />
-              <item name="android" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="expressvpn_toggler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="expressvpn_toggler" type="462c0819:PsiDirectoryNode" />
-              <item name="android" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="expressvpn_toggler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="expressvpn_toggler" type="462c0819:PsiDirectoryNode" />
-              <item name="android" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="expressvpn_toggler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="expressvpn_toggler" type="462c0819:PsiDirectoryNode" />
-              <item name="android" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="expressvpntoggler" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="expressvpn_toggler" type="b2602c69:ProjectViewProjectNode" />
@@ -397,8 +398,8 @@
     <layout>
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.50572246" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Dart Analysis" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30229747" sideWeight="0.49713877" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30229747" sideWeight="0.50572246" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Dart Analysis" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30229747" sideWeight="0.49427754" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Flutter Outline" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -615,13 +616,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Sites/flutter/packages/flutter/lib/src/widgets/basic.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="236">
-          <caret line="3781" column="22" lean-forward="true" selection-start-line="3781" selection-start-column="22" selection-end-line="3781" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Sites/flutter/packages/flutter/lib/src/widgets/text.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-863">
@@ -703,39 +697,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/main.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
-          <caret line="92" column="0" lean-forward="false" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android/app/src/main/java/com/micahjon/expressvpntoggler/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="53" column="12" lean-forward="true" selection-start-line="53" selection-start-column="12" selection-end-line="53" selection-end-column="12" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -747,10 +713,54 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/android/app/src/main/java/com/micahjon/expressvpntoggler/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="45" column="5" lean-forward="true" selection-start-line="45" selection-start-column="5" selection-end-line="45" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Sites/flutter/packages/flutter/lib/src/material/text_field.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-60">
+          <caret line="98" column="8" lean-forward="false" selection-start-line="98" selection-start-column="8" selection-end-line="98" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Sites/flutter/packages/flutter/lib/src/widgets/basic.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="824">
+          <caret line="3820" column="8" lean-forward="false" selection-start-line="3820" selection-start-column="8" selection-end-line="3820" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="31" column="62" lean-forward="false" selection-start-line="31" selection-start-column="62" selection-end-line="31" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/main.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="848">
+          <caret line="284" column="0" lean-forward="true" selection-start-line="284" selection-start-column="0" selection-end-line="284" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/lib/list-devices.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="185" column="17" lean-forward="true" selection-start-line="185" selection-start-column="17" selection-end-line="185" selection-end-column="17" />
+        <state relative-caret-position="288">
+          <caret line="146" column="42" lean-forward="true" selection-start-line="146" selection-start-column="42" selection-end-line="146" selection-end-column="42" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>

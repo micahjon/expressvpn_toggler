@@ -29,23 +29,88 @@ class _ListDevicesState extends State<ListDevices> {
 
   var deviceList;
 
-  var mode = 1;
+  final textEditingController = TextEditingController();
+
+  // Increment to force a UI update
+//  var _uiUpdater = 0;
+//  void updateUI() {
+//    setState(() { _uiUpdater++; });
+//  }
 
   void handleAction(device, action) {
 
-    print('new action ---------');
+    if ( action.containsKey('mode') ) {
+      return updateVPNMode(device, action['mode']);
+    }
+
+    if ( action.containsKey('edit_name') ) {
+      return editName(device, action['edit_name']);
+    }
+
+  }
+
+  void updateVPNMode(device, newMode) {
+
+    device['gw'] = newMode;
+
+    // Immediately show user's choice
+    setState(() {
+      deviceList = deviceList;
+    });
+
+    // Display latest updates from API
+    updateDevice(device, widget.authCookie, widget.macAddress).then((devices) {
+      setState(() {
+        deviceList = devices;
+      });
+    });
+
+  }
+
+  void editName(device, isEditing) {
+
+    print('--------------');
     print(device);
-    print(action);
+    print(isEditing);
+
+    device['__is_editing_name'] = isEditing;
+
+    if ( isEditing ) {
+      // Disable editing on every device except this one
+      deviceList.forEach((thisDevice) {
+        if ( thisDevice != device ) thisDevice.remove('__is_editing_name');
+      });
+      // Set text to device's name
+      textEditingController.text = device['name'];
+    }
+
+    // Update name
+    var nameWasUpdated = ! isEditing
+        && textEditingController.text.length > 0
+        && textEditingController.text != device['name'];
+    if ( nameWasUpdated ) {
+      device['name'] = textEditingController.text;
+    }
+
+    // Immediately show user's edits
+    setState(() {
+      deviceList = deviceList;
+    });
+
+    // Save edited name to API and display latest data
+    if ( nameWasUpdated ) {
+      updateDevice(device, widget.authCookie, widget.macAddress).then((devices) {
+        setState(() {
+          deviceList = devices;
+        });
+      });
+    }
 
   }
 
   @override
   Widget build(BuildContext context) {
 
-
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
@@ -74,7 +139,9 @@ class _ListDevicesState extends State<ListDevices> {
           // horizontal).
           alignment: Alignment.topCenter,
           child: new FutureBuilder<List>(
-              future: getDeviceList(widget.authCookie),
+              future: deviceList != null
+                  ? Future(() => deviceList)
+                  : getDevicesList(widget.authCookie, widget.macAddress),
               builder: (context, snapshot) {
 
                 if ( snapshot.hasError ) {
@@ -85,29 +152,20 @@ class _ListDevicesState extends State<ListDevices> {
                   return CircularProgressIndicator();
                 }
 
-                var devices = snapshot.data;
-
-                // If a device matches the current device, mark it as current
-                // and move it to the beginning of the list
-                var thisDevice = devices.firstWhere(
-                    (device) => device['mac_address'] == widget.macAddress,
-                    orElse: () => null
-                );
-                if ( thisDevice != null ) {
-                  thisDevice['__is_current_device'] = true;
-                  devices.remove(thisDevice);
-                  devices.insert(0, thisDevice);
+                if ( deviceList == null ) {
+                  print('deviceList set from API data');
+                  deviceList = snapshot.data;
                 }
 
-//                print('thisDevice?');
-//                print(thisDevice);
+                print('render');
 
                 return new ListView.builder(
                     itemBuilder: (context, index) {
                       return deviceCard(
-                          devices[index],
+                          deviceList[index],
                           Theme.of(context),
-                          (action) { handleAction(devices[index], action); },
+                          textEditingController,
+                          (action) { handleAction(deviceList[index], action); },
                       );
                     },
                     itemCount: snapshot.data.length
@@ -119,12 +177,162 @@ class _ListDevicesState extends State<ListDevices> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is removed from the Widget tree
+    textEditingController.dispose();
+    super.dispose();
+  }
 }
 
-Card deviceCard(deviceData, theme, handleAction) {
+//--
+
+Future<List> getDevicesList(String authCookie, String currentMacAddress) async {
+
+  print('fetching devices from API..');
+
+  const url = 'https://expressvpnrouter.com/rpc',
+    body = '{"jsonrpc":"2.0","id":1,"method":"load_advanced_routing"}';
+
+  final response =
+  await http
+      .post(
+        url,
+        headers: {
+          'Cookie': 'auth="$authCookie"',
+          'Referer': 'https://expressvpnrouter.com/vpn/manage_devices',
+        },
+        body: body
+      )
+      .timeout(const Duration(seconds: 3));
+
+  // Auth token has expired
+  if ( response.headers['location'] == '/login' ) {
+    throw Exception('auth_cookie_expired');
+  }
+
+  if ( response.headers['content-type'] == 'application/json' ) {
+
+    var map = json.decode(response.body)['result'];
+
+    return createDevicesListForApp(map, currentMacAddress);
+
+  }
+
+  print('Unexpected response:');
+  print(response.headers);
+  print(response.body);
+
+  throw Exception('Unexpected response');
+
+}
+
+
+Future<List> updateDevice(Map device, String authCookie, String currentMacAddress) async {
+
+  print('updating API..');
+
+  var data = json.encode(createDeviceMapForAPI(device));
+
+  var url = 'https://expressvpnrouter.com/rpc',
+      body = '{"jsonrpc":"2.0","id":5,"method":"save_advanced_routing","params":$data}';
+
+  final response =
+  await http
+      .post(
+      url,
+      headers: {
+        'Cookie': 'auth="$authCookie"',
+        'Referer': 'https://expressvpnrouter.com/vpn/manage_devices',
+      },
+      body: body
+  )
+      .timeout(const Duration(seconds: 3));
+
+  // Auth token has expired
+  if ( response.headers['location'] == '/login' ) {
+    throw Exception('auth_cookie_expired');
+  }
+
+  if ( response.headers['content-type'] == 'application/json' ) {
+
+    var map = json.decode(response.body)['result'];
+
+    return createDevicesListForApp(map, currentMacAddress);
+
+  }
+
+  print('Unexpected response:');
+  print(response.headers);
+  print(response.body);
+
+  throw Exception('Unexpected response');
+
+}
+
+// Generates a map of MAC address to device info to send to the API
+Map createDeviceMapForAPI(Map deviceObject) {
+
+  var macAddress = deviceObject['mac_address'];
+  var deviceAPIData = new Map.fromIterable(
+      deviceObject.keys.where((k) => ! k.startsWith('__') && k != 'mac_address' ),
+      key: (k) => k,
+      value: (k) => deviceObject[k]
+  );
+
+  var map = new Map();
+  map[macAddress] = deviceAPIData;
+
+  return map;
+
+}
+
+// Convert map of MAC addresses to other device info (from API)
+// to a list with all the device info (including mac address)
+List createDevicesListForApp(Map deviceMap, String currentMacAddress) {
+
+  var deviceList = [];
+  RegExp matchMacAddress = new RegExp(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$');
+
+  deviceMap.forEach((key, value) {
+    if ( matchMacAddress.hasMatch(key) ) {
+      var deviceData = value;
+      deviceData['mac_address'] = key;
+      deviceList.add(deviceData);
+    }
+  });
+
+  // If a device matches the current device, mark it as current
+  var thisDevice = deviceList.firstWhere(
+          (device) => device['mac_address'] == currentMacAddress,
+      orElse: () => null
+  );
+  if ( thisDevice != null ) {
+    thisDevice['__is_current_device'] = true;
+  }
+
+  // Sort devices alphabetically by name, with current device at the top
+  // Capitalized names will go above lowercase ones, since this usually
+  // means the person actually gave the device a name
+  deviceList.sort((a, b) {
+    if ( a['__is_current_device'] == true ) return -1;
+    if ( b['__is_current_device'] == true ) return 1;
+    return Comparable.compare(a['name'], b['name']);
+  });
+
+  // Note: internally-used properties are prefixed with a double underscore
+  // and not sent to the API
+  return deviceList;
+
+}
+
+//--
+
+Card deviceCard(deviceData, theme, textEditingController, handleAction) {
 
   var isCurrentDevice = deviceData['__is_current_device'] == true;
-  var isStarred = deviceData['__is_starred'] == true;
+  var isEditingName = deviceData['__is_editing_name'] == true;
 
   // Button styles
   var titleStyle = isCurrentDevice
@@ -154,51 +362,74 @@ Card deviceCard(deviceData, theme, handleAction) {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Row(
-          children: <Widget>[
-            Padding(padding: const EdgeInsets.all(8.0)),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
+            children: <Widget>[
+              Padding(padding: const EdgeInsets.all(8.0)),
+              Expanded(
+                child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: isEditingName
+                            ? <Widget>[
+                                Container(
+                                    width: 150.0,
+                                    height: 48.0,
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 4.0),
+                                      ),
+                                      autofocus: true,
+                                      controller: textEditingController,
+                                      onSubmitted: (e) { handleAction({ 'edit_name': false }); },
+                                    ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.save),
+                                  padding: const EdgeInsets.all(0.0),
+                                  iconSize: 16.0,
+                                  onPressed: () { handleAction({ 'edit_name': false }); },
+                                  tooltip: 'edit device name',
+                                ),
+                              ]
+                            : <Widget>[
+                                Text(
+                                  deviceData['name'],
+                                  style: titleStyle,
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  padding: const EdgeInsets.all(0.0),
+                                  iconSize: 16.0,
+                                  onPressed: () { handleAction({ 'edit_name': true }); },
+                                  tooltip: 'edit device name',
+                                ),
+                              ]
+                      ),
                       Text(
-                          deviceData['name'],
-                          style: titleStyle,
+                        '$ipAddress | ${deviceData['mac_address']}',
+                        style: TextStyle(
+                          color: Colors.grey[500],
+                          height: 0.5,
+                        ),
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        padding: const EdgeInsets.all(0.0),
-                        iconSize: 16.0,
-                        onPressed: () { handleAction({ 'editName': true }); },
-                        tooltip: 'edit device name',
-                      ),
-                    ]
-                  ),
-                Text(
-                  '$ipAddress | ${deviceData['mac_address']}',
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                    height: 0.5,
-                  ),
-                ),
-              ]),
-            ),
-            isCurrentDevice
-              ? IconButton(
-                  icon: const Icon(Icons.phone_android),
-                  padding: const EdgeInsets.all(16.0),
-                  tooltip: 'current device',
-                  onPressed: () {},
-              )
-              : IconButton(
-                icon: const Icon(Icons.star_border),
-                padding: const EdgeInsets.all(16.0),
-                onPressed: () { handleAction({ 'starred': ! isStarred }); },
-                tooltip: 'star device',
+                    ]),
               ),
-          ]
+              isCurrentDevice
+                  ? IconButton(
+                icon: const Icon(Icons.home),
+                padding: const EdgeInsets.all(16.0),
+                tooltip: 'current device',
+                onPressed: null,
+              )
+                  : Container(),
+//            IconButton(
+//                icon: const Icon(Icons.star_border),
+//                padding: const EdgeInsets.all(16.0),
+//                onPressed: () { handleAction({ 'starred': ! isStarred }); },
+//                tooltip: 'star device',
+//              ),
+            ]
         ),
         new ButtonTheme.bar( // make buttons use the appropriate styles for cards
           child: new ButtonBar(
@@ -234,53 +465,4 @@ Card deviceCard(deviceData, theme, handleAction) {
       ],
     ),
   );
-}
-
-Future<List> getDeviceList(String authCookie) async {
-
-  const url = 'https://expressvpnrouter.com/rpc',
-    body = '{"jsonrpc":"2.0","id":1,"method":"load_advanced_routing"}';
-
-  final response =
-  await http
-      .post(
-        url,
-        headers: {
-          'Cookie': 'auth="'+ authCookie + '"', // 'auth="test"', //
-          'Referer': 'https://expressvpnrouter.com/vpn/manage_devices',
-        },
-        body: body
-      )
-      .timeout(const Duration(seconds: 3));
-
-  // Auth token has expired
-  if ( response.headers['location'] == '/login' ) {
-    throw Exception('auth_cookie_expired');
-  }
-
-  if ( response.headers['content-type'] == 'application/json' ) {
-
-    var map = json.decode(response.body)['result'];
-
-    var list = [];
-    RegExp matchMacAddress = new RegExp(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$');
-
-    map.forEach((key, value) {
-      if ( matchMacAddress.hasMatch(key) ) {
-        var deviceData = value;
-        deviceData['mac_address'] = key;
-        list.add(deviceData);
-      }
-    });
-
-    return list;
-
-  }
-
-  print('Unexpected response:');
-  print(response.headers);
-  print(response.body);
-
-  throw Exception('Unexpected response');
-
 }

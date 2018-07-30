@@ -3,6 +3,8 @@ import 'dart:async'; // Future
 import 'package:http/http.dart' as http; // http
 import 'list-devices.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 void main() => runApp(new MyApp());
 
@@ -57,8 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
 //  int _counter = 0;
 
   // Username & password
-  String username = 'admin';
-  String password = 'masterofthehouse';
+  String username = ''; // 'admin';
+  String password = ''; // 'masterofthehouse';
 
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -70,14 +72,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _authenticate() {
 
-    username = usernameController.text.length > 0 ? usernameController.text : username;
-    password = passwordController.text.length > 0 ? passwordController.text : password;
+    username = usernameController.text; //.length > 0 ? usernameController.text : username;
+    password = passwordController.text; //.length > 0 ? passwordController.text : password;
+//
+//    print('authenticate...');
+//    print(username + ' ' + username.length.toString());
+//    print(password + ' ' + password.length.toString());
 
     setState(() {
       isAuthenticating = true;
 
       getAuthCookie(username, password)
         .then((cookie) {
+
+          // Authentication was successful. Save credentials.
+          saveCredentials(username, password);
 
           // Get MAC address as well
           getMacAddress().then((result) {
@@ -110,6 +119,21 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context) => ListDevices(authCookie: authCookie, macAddress: macAddress),
       ),
     );
+  }
+
+  @override
+  void initState() {
+
+    getCredentials().then((map) {
+//
+//      print('got credentials');
+//      print(map);
+
+      usernameController.text = map['username'];
+      passwordController.text = map['password'];
+    });
+
+    super.initState();
   }
 
   @override
@@ -150,6 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: new ListTile(
                 leading: const Icon(Icons.person),
                 title: new TextField(
+                  controller: usernameController,
                   decoration: new InputDecoration(
                     hintText: "Username",
                   ),
@@ -161,6 +186,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: new ListTile(
                 leading: const Icon(Icons.lock),
                 title: new TextField(
+                  controller: passwordController,
+                  obscureText: true,
                   decoration: new InputDecoration(
                     hintText: "Password",
                   ),
@@ -239,5 +266,32 @@ Future<String> getMacAddress() async {
   }
 
   return result;
+
+}
+
+Future<Map> getCredentials() async {
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String username = prefs.getString('username') ?? '';
+  String password = prefs.getString('password') ?? '';
+//
+//  print('username = ' + username);
+//  print('password = ' + password);
+
+  return {
+    "username": username,
+    "password": password,
+  };
+
+}
+
+Future saveCredentials(username, password) async {
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  await prefs.setString('username', username);
+  await prefs.setString('password', password);
+
+  print('saved credentials');
 
 }

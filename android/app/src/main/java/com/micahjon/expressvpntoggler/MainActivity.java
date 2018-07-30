@@ -45,6 +45,11 @@ public class MainActivity extends FlutterActivity {
 
     }
 
+    /**
+     * Get MAC address of current device
+     * https://stackoverflow.com/questions/33159224/getting-mac-address-in-android-6-0
+     * @return String
+     */
     public static String getMacAddress() {
 
         // TEMP - FOR DEBUGGING
