@@ -74,7 +74,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
     username = usernameController.text; //.length > 0 ? usernameController.text : username;
     password = passwordController.text; //.length > 0 ? passwordController.text : password;
-//
+
+//    getMacAddress().then((result) {
+//      setState(() {
+//        macAddress = result;
+//      });
+//    });
+
 //    print('authenticate...');
 //    print(username + ' ' + username.length.toString());
 //    print(password + ' ' + password.length.toString());
@@ -169,6 +175,9 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+//            new Text(
+//              "MAC: '$macAddress'"
+//            ),
             new Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: new ListTile(
@@ -260,8 +269,18 @@ Future<String> getMacAddress() async {
   String result = '';
   try {
     result = await platform.invokeMethod('getMacAddress');
+
+    // Convert to uppercase
+    result = result.toUpperCase();
+
+    // Add leading zeros
+    result = result.splitMapJoin(':',
+        onNonMatch: (n) => n.length == 2 ? n : '0$n',
+    );
+
     print('Got MAC address: $result.');
-  } on PlatformException catch (e) {
+  }
+  on PlatformException catch (e) {
     print('Unable to get MAC address: ${e.message}.');
   }
 

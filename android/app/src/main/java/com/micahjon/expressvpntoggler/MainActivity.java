@@ -54,7 +54,8 @@ public class MainActivity extends FlutterActivity {
 
         // TEMP - FOR DEBUGGING
 //        String str = "a4:5e:60:e1:c0:11";
-//        return str.toUpperCase();
+//        String str = "10:CD:B6:03:54:E3";
+//        return str;
 
         //--
 
@@ -76,7 +77,8 @@ public class MainActivity extends FlutterActivity {
                 if (res1.length() > 0) {
                     res1.deleteCharAt(res1.length() - 1);
                 }
-                return res1.toString().toUpperCase();
+
+                return res1.toString();
             }
         } catch (Exception ex) {
             //handle exception
