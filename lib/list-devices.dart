@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async'; // Future
 import 'dart:convert'; // json
 import 'package:http/http.dart' as http; // http
+import 'main.dart';
 //import 'package:device_info/device_info.dart';
 
 
@@ -59,11 +60,17 @@ class _ListDevicesState extends State<ListDevices> {
     });
 
     // Display latest updates from API
-    updateDevice(device, widget.authCookie, widget.macAddress).then((devices) {
-      setState(() {
-        deviceList = devices;
+    updateDevice(device, widget.authCookie, widget.macAddress)
+      .then((devices) {
+        setState(() {
+          deviceList = devices;
+        });
+      })
+      .catchError((error) {
+        print('Unable to update VPN mode:');
+        print(error);
+        _loginAgain();
       });
-    });
 
   }
 
@@ -99,13 +106,28 @@ class _ListDevicesState extends State<ListDevices> {
 
     // Save edited name to API and display latest data
     if ( nameWasUpdated ) {
-      updateDevice(device, widget.authCookie, widget.macAddress).then((devices) {
-        setState(() {
-          deviceList = devices;
-        });
-      });
+      updateDevice(device, widget.authCookie, widget.macAddress)
+          .then((devices) {
+            setState(() {
+              deviceList = devices;
+            });
+          })
+          .catchError((error) {
+            print('Unable to update name:');
+            print(error);
+            _loginAgain();
+          });
     }
 
+  }
+
+  void _loginAgain() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MyHomePage(),
+      ),
+    );
   }
 
   @override
@@ -153,11 +175,9 @@ class _ListDevicesState extends State<ListDevices> {
                 }
 
                 if ( deviceList == null ) {
-                  print('deviceList set from API data');
+//                  print('deviceList set from API data');
                   deviceList = snapshot.data;
                 }
-
-                print('render');
 
                 return new ListView.builder(
                     itemBuilder: (context, index) {
@@ -168,7 +188,7 @@ class _ListDevicesState extends State<ListDevices> {
                           (action) { handleAction(deviceList[index], action); },
                       );
                     },
-                    itemCount: snapshot.data.length
+                    itemCount: deviceList.length
                 );
 
               },
@@ -206,6 +226,9 @@ Future<List> getDevicesList(String authCookie, String currentMacAddress) async {
         body: body
       )
       .timeout(const Duration(seconds: 3));
+
+  print('got response:');
+  print(response.body);
 
   // Auth token has expired
   if ( response.headers['location'] == '/login' ) {
@@ -296,7 +319,7 @@ List createDevicesListForApp(Map deviceMap, String currentMacAddress) {
   RegExp matchMacAddress = new RegExp(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$');
 
   deviceMap.forEach((key, value) {
-    if ( matchMacAddress.hasMatch(key) ) {
+    if ( matchMacAddress.hasMatch(key) && value['name'] != null ) {
       var deviceData = value;
       deviceData['mac_address'] = key;
       deviceList.add(deviceData);
