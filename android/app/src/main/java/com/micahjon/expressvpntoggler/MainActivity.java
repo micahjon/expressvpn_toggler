@@ -76,7 +76,7 @@ public class MainActivity extends FlutterActivity {
                 if (res1.length() > 0) {
                     res1.deleteCharAt(res1.length() - 1);
                 }
-                return res1.toString();
+                return res1.toString().toUpperCase();
             }
         } catch (Exception ex) {
             //handle exception
